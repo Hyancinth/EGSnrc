@@ -48,6 +48,7 @@ class QLabel;
 class QImage;
 class SaveImage;
 class ClippingPlanesWidget;
+class sterigenicsTab;
 
 
 class GeometryViewControl : public QMainWindow, public Ui::GeometryViewControl {
@@ -149,6 +150,7 @@ private:
     ClippingPlanesWidget *cplanes;
     ImageWindow *gview;
     SaveImage *save_image;
+    sterigenicsTab *sterTab;
 
     QString filename;
     QString filename_tracks;

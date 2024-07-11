@@ -37,13 +37,13 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 HEADERS	+= egs_visualizer.h image_window.h egs_light.h \
                  clippingplanes.h viewcontrol.h geometryview.ui.h \
                  saveimage.h egs_user_color.h egs_track_view.h \
-                 renderworker.h
+                 renderworker.h sterigenicstab.h
 
 SOURCES	+= main.cpp egs_visualizer.cpp egs_track_view.cpp \
                  saveimage.cpp clippingplanes.cpp viewcontrol.cpp \
-                 renderworker.cpp image_window.cpp
+                 renderworker.cpp image_window.cpp sterigenicstab.cpp
 
-FORMS           = saveimage.ui clippingplanes.ui viewcontrol.ui
+FORMS           = saveimage.ui clippingplanes.ui viewcontrol.ui sterigenicstab.ui
 
 win32 {
     CONFIG	+= qt warn_off release windows exceptions_off thread

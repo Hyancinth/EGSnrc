@@ -35,6 +35,7 @@
 #include "saveimage.h"
 #include "clippingplanes.h"
 #include "viewcontrol.h"
+#include "sterigenicstab.h"
 
 #include "egs_libconfig.h"
 #include "egs_functions.h"
@@ -174,6 +175,9 @@ GeometryViewControl::GeometryViewControl(QWidget *parent, const char *name)
 
     // Add the clipping planes widget to the designated layout
     clipLayout->addWidget(cplanes);
+
+    sterTab = new sterigenicsTab;
+    tabWidget->addTab(sterTab, "Sterigenics Tab");
 
     // set the widget to show near the left-upper corner of the screen
     move(QPoint(25,25));
@@ -360,7 +364,7 @@ bool GeometryViewControl::loadInput(bool reloading, EGS_BaseGeometry *simGeom) {
 
     // Only allow region selection for up to 1k regions
     int nreg = newGeom->regions();
-    if (nreg < 1001) {
+    if (nreg < 10000001) {
         allowRegionSelection = true;
         show_regions.resize(nreg,true);
     }
