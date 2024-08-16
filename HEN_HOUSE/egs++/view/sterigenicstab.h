@@ -14,11 +14,17 @@ class sterigenicsTab : public QWidget
 
 public:
     explicit sterigenicsTab(QWidget *parent = 0, const char *name = 0);
-    ~sterigenicsTab();
+    ~sterigenicsTab(); // deconstructor
 
 public slots:
     void pushButtonClicked(bool checked);
     void changeButtonColour();
+    void inputButtonClicked();
+    void runSimButtonClicked();
+    void openFileButtonClicked();
+
+    void onSimulationFinished(const QString& simOutput);
+    void onErrorOccurred(const QString& err);
 
 signals:
     void counterReached();
