@@ -364,7 +364,7 @@ bool GeometryViewControl::loadInput(bool reloading, EGS_BaseGeometry *simGeom) {
 
     // Only allow region selection for up to 1k regions
     int nreg = newGeom->regions();
-    if (nreg < 10000001) {
+    if (nreg < 1001) {
         allowRegionSelection = true;
         show_regions.resize(nreg,true);
     }

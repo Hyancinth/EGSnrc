@@ -1,3 +1,15 @@
+/**
+ * EGS View tab extension for Sterigenics
+ * Creates and runs EGSnrc simulations based on GUI inputs
+ * Worker function to run egs sim process on a different thread. 
+ * 
+ * TO DO:
+ *      Full functionality has not been implemented, specifically with placing the mesh within the product
+ *      As well all of the required parameters needed to be inputted is unknown at the moment 
+ * 
+ * Author: Ethan Tran , 2024
+*/
+
 #include "sterigenicstab.h"
 #include "sterigenicsWorker.h"
 #include <QProcess> 
@@ -44,7 +56,8 @@ sterigenicsTab::~sterigenicsTab()
 {
     delete ui;
 }
-
+ 
+// TEST 
 void sterigenicsTab::pushButtonClicked(bool checked)
 {
     // // process for running python script
@@ -126,7 +139,10 @@ void sterigenicsTab::changeButtonColour(){
 }
 
 void sterigenicsTab::inputButtonClicked(){
-    
+    /**
+     * Creates python file based on user inputs and runs egs-rollout
+     * 
+    */
     // get all labels and input texts
     int emptyFlag = 0; 
     QList<QLineEdit *> inputList = ui -> verticalLayoutWidget->findChildren<QLineEdit *>();
@@ -201,6 +217,7 @@ void sterigenicsTab::inputButtonClicked(){
         QString filePath;
         filePath = filePath + getenv("EGS_HOME") + "mevegs";
 
+        // write to output file
         QFile outFile(filePath);
         printf("Before\n");
         fflush(stdout);
@@ -225,6 +242,7 @@ void sterigenicsTab::inputButtonClicked(){
         qDeleteAll(labelList.begin(), labelList.end());
 
         
+        // run chmod command (egs-rollout into an executable)
         QProcess chmodProcess;
 
         // QString chmodCommand = "chmod a+x " + QDir::homePath() + "/Desktop/EGSnrc/egs_home/mevegs/egs-rollout";
@@ -238,6 +256,8 @@ void sterigenicsTab::inputButtonClicked(){
             printf("Chmod Process Error: %s\n", chmodError.toStdString().c_str());
         }
 
+
+        // run egs-rollout command 
         printf("start egs-rollout\n");
 
         // QString egsRolloutPath = QDir::homePath() + "/Desktop/EGSnrc/egs_home/mevegs";
@@ -264,10 +284,15 @@ void sterigenicsTab::inputButtonClicked(){
 
 }
 
+
 void sterigenicsTab::runSimButtonClicked(){
+    /**
+     * Runs the egsinp file created by egs-rollout (from the above function)
+    */
     int emptyFlag = 0; 
     int timeoutLimit = std::numeric_limits<int>::max();
 
+    // check that the simulation params are filled 
     QList<QLineEdit *> inputList = ui -> verticalLayoutWidget->findChildren<QLineEdit *>();
     std::vector<QString> allInputs;
     for (QLineEdit *input : inputList){
@@ -318,24 +343,8 @@ void sterigenicsTab::runSimButtonClicked(){
         // egsProcess.start(simCommand);
 
         printf("start sim \n");
-        // auto f = std::async(std::launch::async, [&egsProcess] (){    
-        //     if(!egsProcess.waitForFinished(-1)){
-        //         QString egsProcessError = egsProcess.errorString();
-        //         printf("Process Error: %s\n", egsProcessError.toStdString().c_str());
-        //     }
-        //     QString egsProcessOutput = egsProcess.readAllStandardOutput();
-        //     printf("%s \n", egsProcessOutput.toStdString().c_str());
-        //     printf("done sim\n");
-        // });
-        // if(!egsProcess.waitForFinished(timeoutLimit)){
-        //     QString egsProcessError = egsProcess.errorString();
-        //     printf("Process Error: %s\n", egsProcessError.toStdString().c_str());
-        // }
-        // QString egsProcessOutput = egsProcess.readAllStandardOutput();
-        // printf("%s \n", egsProcessOutput.toStdString().c_str());
-        // printf("done sim\n");
 
-
+        // create new thread so that egs_view doesn't freeze while the simulation is running 
         QThread* thread = new QThread;
         sterigenicsWorker* worker = new sterigenicsWorker(simCommand, timeoutLimit);
 
